@@ -1,15 +1,21 @@
 import 'dart:async';
 
+import 'package:app_tfg_mlr/services/notification_service.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.initializeNotification();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
@@ -65,12 +71,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _updatePosition(Position pos) async {
     List<Placemark> pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-    double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 50.930455, 6.954859);
+    double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 37.205179, -3.5960214);
     setState(() {
       _latitude = pos.latitude.toString();
       _longitude = pos.longitude.toString();
       _distanceInMeters = distanceInMeters.toString();
     });
+    if(distanceInMeters < 149){
+      await NotificationService.showNotification(
+        title: "Título",
+        body: "Cuerpo",
+        summary: "summary",
+        notificationLayout: NotificationLayout.BigPicture,
+        bigPicture: "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg"
+      );
+    }
   }
   
 

@@ -1,6 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+import '../screens/second_screen.dart';
+
 class NotificationService{
   static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
@@ -65,9 +68,9 @@ class NotificationService{
     debugPrint('onActionReceivedMethod');
     final payload = receivedAction.payload ?? {};
     if(payload["navigate"] == "true"){
-      MainApp.navigatorKey.currentState?.push(
+      MyApp.navigatorKey.currentState?.push(
         MaterialPageRoute(
-          builder: const SecondScreen(),
+          builder: (_) => const SecondScreen(),
         ),
       );
     }
