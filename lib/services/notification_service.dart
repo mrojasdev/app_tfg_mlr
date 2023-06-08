@@ -85,6 +85,7 @@ class NotificationService{
     final NotificationLayout notificationLayout = NotificationLayout.Default,
     final NotificationCategory? category,
     final String? bigPicture,
+    final String? largeIcon,
     final List<NotificationActionButton>? actionButtons,
     final bool scheduled = false,
     final int? interval,
@@ -103,6 +104,7 @@ class NotificationService{
         category: category,
         payload: payload,
         bigPicture: bigPicture,
+        largeIcon: largeIcon,
       ),
       actionButtons: actionButtons,
       schedule: scheduled

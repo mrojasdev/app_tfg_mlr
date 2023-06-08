@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _startLocationUpdates() async {
+
     _positionStreamSubscription = Geolocator.getPositionStream(
     ).listen((position) {
       _updatePosition(position);
@@ -77,13 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
       _longitude = pos.longitude.toString();
       _distanceInMeters = distanceInMeters.toString();
     });
-    if(distanceInMeters < 149){
+    if(distanceInMeters < 155){
       await NotificationService.showNotification(
         title: "Título",
         body: "Cuerpo",
         summary: "summary",
         notificationLayout: NotificationLayout.BigPicture,
-        bigPicture: "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg"
+        bigPicture: "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
       );
     }
   }
