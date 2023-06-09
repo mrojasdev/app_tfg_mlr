@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app_tfg_mlr/screens/screens.dart';
 import 'package:app_tfg_mlr/services/notification_service.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Location Test',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -43,15 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int currentIndex = 0;
-
-  final screens = [
-    PlacesVisitedScreen(),
-    StoriesCollectedScreen(),
-    AchievementsScreen(),
-    ProfileScreen(),
-  ];
-
   var _latitude = "";
   var _longitude = "";
   var _distanceInMeters = "";
@@ -83,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _updatePosition(Position pos) async {
     List<Placemark> pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-    double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 37.241263573, -3.560461439);
+    double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 37.205179, -3.5960214);
     setState(() {
       _latitude = pos.latitude.toString();
       _longitude = pos.longitude.toString();
@@ -105,36 +94,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        unselectedItemColor: Colors.black54,
-        selectedItemColor: Colors.black,
-        showUnselectedLabels: false,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        items: const <BottomNavigationBarItem> [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_outlined),
-            label: "Lugares",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.auto_stories_outlined),
-            label: "Historias",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.military_tech_outlined),
-            label: "Logros",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
-            label: "Perfil",
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Latitude: " + _latitude,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              "Longitude: " + _longitude,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(
+              "Distance to objective: " + _distanceInMeters,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
       ),
     );
   }
