@@ -1,22 +1,23 @@
+import 'package:app_tfg_mlr/models/story.dart';
 import 'package:flutter/material.dart';
 
 import '../models/place.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreenStory extends StatelessWidget {
 
-  final Place place;
+  final Story story;
 
-  const DetailsScreen({super.key, required this.place});
+  const DetailsScreenStory({super.key, required this.story});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _CustomAppBar(place: place,),
+          _CustomAppBar(story: story,),
           SliverList(
             delegate: SliverChildListDelegate([
-              _PlaceInfo(place: place,)
+              _StoryInfo(story: story,)
             ])
           )
         ],
@@ -26,8 +27,8 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class _CustomAppBar extends StatelessWidget {
-  const _CustomAppBar({super.key, required this.place});
-  final Place place;
+  const _CustomAppBar({super.key, required this.story});
+  final Story story;
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +45,14 @@ class _CustomAppBar extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           color: Colors.black26,
           child: Text(
-            place.title
+            story.title
             ,
             style: TextStyle(fontSize: 16),
           )
         ),
         background: FadeInImage(
           placeholder: AssetImage('assets/loading-gif.gif'),
-          image: NetworkImage(place.image),
+          image: AssetImage('assets/story_background.jpg'),
           fit: BoxFit.cover,
         ),
       ),
@@ -59,9 +60,9 @@ class _CustomAppBar extends StatelessWidget {
   }
 }
 
-class _PlaceInfo extends StatelessWidget {
-  final Place place;
-  const _PlaceInfo({super.key, required this.place});
+class _StoryInfo extends StatelessWidget {
+  final Story story;
+  const _StoryInfo({super.key, required this.story});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _PlaceInfo extends StatelessWidget {
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Text(
-        place.body.toString()
+        story.body.toString()
         ,
         textAlign: TextAlign.justify,
         style: Theme.of(context).textTheme.subtitle1,

@@ -7,7 +7,7 @@ class AchievementsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("Achievements Screen"),
+        child: Text("Work in progress"),
       ),
     );
   }
