@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:app_tfg_mlr/screens/screens.dart';
+import 'package:app_tfg_mlr/services/mysql.dart';
 import 'package:app_tfg_mlr/services/notification_service.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+
+import 'models/place.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +47,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentIndex = 0;
+  final db = Mysql();
+  var placename = '';
+  var detail = '';
+  var image = '';
+  Place? place = null;
+
+  void _getPlaceNotificationInfo(){
+    db.getConnection().then((conn) {
+      String sql = 'select * from places where id = 1;';
+      conn.query(sql).then((results){
+        for(var row in results){
+          setState(() {
+            placename = row[0];
+            detail = row[1];
+            image = row[2];
+          });
+        }
+      });
+      conn.close();
+    });
+  }
 
   final screens = [
     PlacesVisitedScreen(),
@@ -60,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _getPlaceNotificationInfo();
     _startLocationUpdates();
   }
 
@@ -91,11 +116,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     if(distanceInMeters < 155){
       await NotificationService.showNotification(
-        title: "Título",
-        body: "Cuerpo",
+        title: placename,
+        body: detail,
         summary: "summary",
         notificationLayout: NotificationLayout.BigPicture,
-        bigPicture: "https://i.kym-cdn.com/entries/icons/original/000/026/489/crying.jpg",
+        bigPicture: image,
+        largeIcon: image,
       );
     }
   }
@@ -116,7 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Colors.black,
         showUnselectedLabels: false,
         currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
+        onTap: (index) => setState(() {
+          currentIndex = index;
+        }),
         items: const <BottomNavigationBarItem> [
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book_outlined),
