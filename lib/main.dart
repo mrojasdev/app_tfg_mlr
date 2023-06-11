@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_tfg_mlr/screens/create_story_screen.dart';
 import 'package:app_tfg_mlr/screens/screens.dart';
 import 'package:app_tfg_mlr/services/mysql.dart';
 import 'package:app_tfg_mlr/services/notification_service.dart';
@@ -150,7 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              
+               final route = MaterialPageRoute(
+                  builder: (context) =>
+                    CreateStoryScreen(user: widget.user,));
+                    Navigator.pushReplacement(context, route);
             },
             icon: Icon(Icons.add_location_alt_outlined)
           ),

@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
           if(userList.isNotEmpty){
             final route = MaterialPageRoute(
                   builder: (context) =>
-                    MyHomePage(title: "a", user: userList[0],));
+                    MyHomePage(title: "Cicerone", user: userList[0],));
                     Navigator.pushReplacement(context, route);
           } else {
             alertaCoincidencia(context);
