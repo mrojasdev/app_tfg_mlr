@@ -38,22 +38,23 @@ class Mysql {
     });
     return placesList;
   }
-/*
+
   Future<List<Place>> getCurrentPlaces(double ) async{
-  List<Place> placesList = [];
-  getConnection().then((conn) {
-    String sql = 'select * from places;';
-    conn.query(sql).then((results){
-      for(var row in results){
-        placesList.add(
-          Place(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), image: row[7], city: row[8])
-        );
-        print(placesList[0].body);
-      }
+    List<Place> placesList = [];
+    getConnection().then((conn) {
+      String sql = 'select * from places;';
+      conn.query(sql).then((results){
+        for(var row in results){
+          placesList.add(
+            Place(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), image: row[7], city: row[8])
+          );
+          print(placesList[0].body);
+        }
+      });
+      conn.close();
     });
-    conn.close();
-  });
-  return placesList;
-}
-*/
+    return placesList;
+  }
+
+  
 }

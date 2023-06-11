@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 import 'models/place.dart';
+import 'models/user.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,20 +27,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Location Test',
+      title: 'Cicerone',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Location Test'),
+      home: const LoginScreen(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.user});
 
   final String title;
+  final User user;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -137,14 +139,20 @@ class _MyHomePageState extends State<MyHomePage> {
         children: screens,
       ),
       appBar: AppBar(
-        title: Text('Location App'),
+        title: Text(
+          'Cicerone',
+        ),
+        elevation: 1.5,
+        shadowColor: Colors.black,
+        backgroundColor: Colors.white,
+
         actions: [
           IconButton(
             onPressed: () {
               
             },
             icon: Icon(Icons.add_location_alt_outlined)
-          )
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
