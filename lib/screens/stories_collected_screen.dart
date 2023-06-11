@@ -29,7 +29,6 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
           setState(() {
             storyList = storiesList;
           });
-          print(storiesList[0].body);
         }
       });
       conn.close();

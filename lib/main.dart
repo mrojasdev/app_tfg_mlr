@@ -51,11 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
   var placename = '';
   var detail = '';
   var image = '';
-  Place? place = null;
+  //List<Place> currentPlaces = [];
 
   void _getPlaceNotificationInfo(){
     db.getConnection().then((conn) {
-      String sql = 'select * from places where id = 1;';
+      String sql = 'select title, detail, image from places where id = 1;';
       conn.query(sql).then((results){
         for(var row in results){
           setState(() {
@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _updatePosition(Position pos) async {
     List<Placemark> pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+    //currentPlaces = 
     double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 37.241263573, -3.560461439);
     setState(() {
       _latitude = pos.latitude.toString();
@@ -134,6 +135,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: IndexedStack(
         index: currentIndex,
         children: screens,
+      ),
+      appBar: AppBar(
+        title: Text('Location App'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              
+            },
+            icon: Icon(Icons.add_location_alt_outlined)
+          )
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

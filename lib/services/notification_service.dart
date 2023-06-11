@@ -1,7 +1,10 @@
+import 'package:app_tfg_mlr/screens/details_screen.dart';
+import 'package:app_tfg_mlr/screens/screens.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
+import '../models/place.dart';
 import '../screens/second_screen.dart';
 
 class NotificationService{
