@@ -53,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var placename = '';
   var detail = '';
   var image = '';
+  List<Widget> screens = [];
   //List<Place> currentPlaces = [];
 
   void _getPlaceNotificationInfo(){
@@ -71,13 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  final screens = [
-    PlacesVisitedScreen(),
-    StoriesCollectedScreen(),
-    AchievementsScreen(),
-    ProfileScreen(),
-  ];
-
   var _latitude = "";
   var _longitude = "";
   var _distanceInMeters = "";
@@ -88,6 +82,13 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _getPlaceNotificationInfo();
     _startLocationUpdates();
+
+    this.screens = [
+      PlacesVisitedScreen(user: widget.user,),
+      StoriesCollectedScreen(user: widget.user,),
+      AchievementsScreen(),
+      ProfileScreen(),
+    ];
   }
 
   @override

@@ -2,10 +2,13 @@ import 'package:app_tfg_mlr/models/place.dart';
 import 'package:app_tfg_mlr/screens/details_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
 import '../services/mysql.dart';
 
 class PlacesVisitedScreen extends StatefulWidget {
-  const PlacesVisitedScreen({super.key});
+  const PlacesVisitedScreen({super.key, required this.user});
+
+  final User user;
 
   @override
   State<PlacesVisitedScreen> createState() => _PlacesVisitedScreenState();
@@ -18,8 +21,8 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
   _getPlaceInfo() {
     List<Place> placesList = [];
     db.getConnection().then((conn) {
-      String sql = 'SELECT p.* FROM places p INNER JOIN user_place up ON p.id = up.place_id INNER JOIN users u ON up.username = u.username WHERE u.username = "mrojasdev";';
-      conn.query(sql).then((results){
+      String sql = 'SELECT p.* FROM places p INNER JOIN user_place up ON p.id = up.place_id INNER JOIN users u ON up.username = u.username WHERE u.username = ?;';
+      conn.query(sql, [widget.user.username]).then((results){
         for(var row in results){
           placesList.add(
             Place(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), image: row[7], city: row[8])
@@ -31,7 +34,6 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
           print(placesList[0].body);
         }
       });
-      conn.close();
     });
   }
   
