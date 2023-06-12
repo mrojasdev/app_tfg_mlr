@@ -25,9 +25,7 @@ class RegisterScreen extends StatelessWidget {
     List<User> userList = [];
     db.getConnection().then((conn) {
       String sql = 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);';
-      conn.query(sql, [username, passwd, firstname, lastname, age, email],).whenComplete(() => conn.close());
-
-        
+      conn.query(sql, [username, passwd, firstname, lastname, age, email],).whenComplete(() => conn.close()).whenComplete(() => conn.close());       
       });
   }
 

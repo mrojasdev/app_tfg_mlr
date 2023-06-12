@@ -2,6 +2,7 @@ import 'package:app_tfg_mlr/main.dart';
 import 'package:app_tfg_mlr/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geolocator/geolocator.dart';
 import '../models/user.dart';
 import '../services/mysql.dart';
 import '../themes/app_themes.dart';
@@ -12,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
+  Geolocator.requestPermission();
   var db = Mysql();
   String email = '';
   String passwd = '';
@@ -36,12 +37,11 @@ class LoginScreen extends StatelessWidget {
             alertaCoincidencia(context);
           }
         }
-      });
+      }).whenComplete(() => conn.close());
     });
   }
 
-    return Scaffold
-    (
+    return Scaffold(
       body: Form(
         key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,

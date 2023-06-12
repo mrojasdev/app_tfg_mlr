@@ -187,6 +187,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(
           'Cicerone',
+          style: TextStyle(
+            fontFamily: 'KaushanScript',
+            fontWeight: FontWeight.w500
+          ),
         ),
         elevation: 1.5,
         shadowColor: Colors.black,

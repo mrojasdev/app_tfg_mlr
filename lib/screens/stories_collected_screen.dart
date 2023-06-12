@@ -33,7 +33,7 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
             storyList = storiesList;
           });
         }
-      });
+      }).whenComplete(() => conn.close());
     });
   }
   

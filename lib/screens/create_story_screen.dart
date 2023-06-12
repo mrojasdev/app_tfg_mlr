@@ -97,9 +97,7 @@ class CreateStoryScreen extends StatelessWidget {
                     longitude = position.longitude;
                     _registerStory(latitude, longitude, title, body, user.username);
 
-                    final route = MaterialPageRoute(
-                        builder: (context) => MyHomePage(title: "Cicerone", user: user));
-                    Navigator.pushReplacement(context, route);
+                    Navigator.pop(context);
                   },
                   child: const SizedBox(
                       width: double.infinity,
