@@ -45,9 +45,11 @@ class _CustomAppBar extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           color: Colors.black26,
           child: Text(
-            story.title
-            ,
-            style: TextStyle(fontSize: 16),
+            story.title,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black87
+            ),
           )
         ),
         background: FadeInImage(

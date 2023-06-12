@@ -84,6 +84,15 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
+                          Text(
+                            place.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 24,
+                              
+                            ),
+                          ),
                           Ink.image(
                             image: NetworkImage(
                               place.image
@@ -96,15 +105,6 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
                             height: 120,
                             fit: BoxFit.cover,
                           ),
-                          Text(
-                            place.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 24,
-                              
-                            ),
-                          )
                         ],
                       ),
                     )

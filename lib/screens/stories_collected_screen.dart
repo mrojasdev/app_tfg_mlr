@@ -82,6 +82,15 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
+                            Text(
+                            story.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black87,
+                              fontSize: 24,
+                              fontFamily: 'KaushanScript',
+                            ),
+                          ),
                           Ink.image(
                             image: AssetImage('assets/story_background.jpg'),
                             child: InkWell(
@@ -89,17 +98,9 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreenStory(story: story)));
                               },
                             ),
-                            height: 120,
+                            height: 60,
                             fit: BoxFit.cover,
                           ),
-                          Text(
-                            story.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          )
                         ],
                       ),
                     )

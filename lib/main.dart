@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
               String sql = 'INSERT INTO user_story VALUES (?, ?, ?, 0);';
               conn.query(sql, [widget.user.username, story.id, DateTime.now().toUtc()],).whenComplete(() => conn.close()); 
               NotificationService.showNotification(
-                title: "Historia de usuario Recolectada: $story.title",
+                title: "Historia Recogida: "+story.title,
                 body: story.body,
                 notificationLayout: NotificationLayout.BigText,
             );
