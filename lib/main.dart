@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_tfg_mlr/models/story.dart';
 import 'package:app_tfg_mlr/screens/create_story_screen.dart';
 import 'package:app_tfg_mlr/screens/screens.dart';
 import 'package:app_tfg_mlr/services/mysql.dart';
@@ -56,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var image = '';
   List<Widget> screens = [];
   List<Place> currentPlaces = [];
+  List<Story> currentStories = [];
 
   void _getPlaceNotificationInfo(){
     db.getConnection().then((conn) {
@@ -111,17 +113,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _updatePosition(Position pos) async {
-    _receiveClosePlaces(pos.latitude, pos.longitude); 
+    _receiveClosePlaces(pos.latitude, pos.longitude);
+    _receiveCloseStories(pos.latitude, pos.longitude);
     setState(() {
       _latitude = pos.latitude.toString();
       _longitude = pos.longitude.toString();
     });
     print(currentPlaces);
+    print(currentStories);
     currentPlaces.forEach((element) async {
       double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, element.latitude, element.longitude);
       if(distanceInMeters < element.radius){
         _addPlaceToUser(element, widget.user.username);
-    }
+      }
+    });
+    currentStories.forEach((story) async {
+      double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, story.latitude, story.longitude);
+      if(distanceInMeters < story.radius){
+        _addStoryToUser(story, widget.user.username);
+      }
     });
     
   }
@@ -137,6 +147,23 @@ class _MyHomePageState extends State<MyHomePage> {
           );
           setState(() {
             currentPlaces = placesList;
+          });
+        }
+      }).whenComplete(() => conn.close());
+    });
+  }
+
+  _receiveCloseStories(double latitude, double longitude) {
+    List<Story> storiesList = [];
+    db.getConnection().then((conn) {
+      String sql = 'SELECT * FROM stories WHERE (longitude BETWEEN (? - 0.0500) AND (? + 0.0500)) AND (latitude BETWEEN (? - 0.0500) AND (? + 0.0500)) AND id NOT IN ( SELECT story_id FROM user_story WHERE username = ? );';
+      conn.query(sql, [longitude, longitude, latitude, latitude, widget.user.username]).then((results){
+        for(var row in results){
+          storiesList.add(
+            Story(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), views: row[7], likes: row[8], username: row[9])
+          );
+          setState(() {
+            currentStories = storiesList;
           });
         }
       }).whenComplete(() => conn.close());
@@ -164,6 +191,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 notificationLayout: NotificationLayout.BigPicture,
                 bigPicture: place.image,
                 largeIcon: place.image,
+            );
+            });
+          }
+        });
+      });
+
+    }catch(e){
+      print(e);
+      return;
+    }
+  }
+
+  _addStoryToUser(Story story, String username) {
+    try{
+      bool isStoryAdded = false;
+      db.getConnection().then((conn) {
+        String sql = 'SELECT * FROM user_story WHERE (username = ? AND story_id = ?);';
+        conn.query(sql, [widget.user.username, story.id]).then((results){
+          for(var row in results){
+            isStoryAdded = true;
+          }
+        }).whenComplete((){
+          conn.close();
+          if(!isStoryAdded){
+            db.getConnection().then((conn) {
+              String sql = 'INSERT INTO user_story VALUES (?, ?, ?, 0);';
+              conn.query(sql, [widget.user.username, story.id, DateTime.now().toUtc()],).whenComplete(() => conn.close()); 
+              NotificationService.showNotification(
+                title: "Historia de usuario Recolectada: $story.title",
+                body: story.body,
+                notificationLayout: NotificationLayout.BigText,
             );
             });
           }

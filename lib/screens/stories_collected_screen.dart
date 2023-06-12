@@ -36,6 +36,23 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
       }).whenComplete(() => conn.close());
     });
   }
+
+  Future<void> _refreshStoryInfo() async{
+    List<Story> storiesList = [];
+    db.getConnection().then((conn) {
+      String sql = 'SELECT s.* FROM stories s INNER JOIN user_story us ON s.id = us.story_id INNER JOIN users u ON us.username = u.username WHERE u.username = ?;';
+      conn.query(sql, [widget.user.username]).then((results){
+        for(var row in results){
+          storiesList.add(
+            Story(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), views: row[7], likes: row[8], username: row[9])
+          );
+          setState(() {
+            storyList = storiesList;
+          });
+        }
+      }).whenComplete(() => conn.close());
+    });
+  }
   
 
 
@@ -46,47 +63,51 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
       child: Container(
         margin: const EdgeInsets.all(10),
         width: double.infinity,
-        child: ListView.builder(
-          itemCount: storyList.length,
-          itemBuilder: (BuildContext context, int index){
-            final story = storyList[index];
-            return Container(
-              child: Column(
-                children: [
-                  Card(
-                    color: Colors.white,
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Ink.image(
-                          image: AssetImage('assets/story_background.jpg'),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreenStory(story: story)));
-                            },
+        child: RefreshIndicator(
+          color: Colors.black87,
+          onRefresh: () => _refreshStoryInfo(),
+          child: ListView.builder(
+            itemCount: storyList.length,
+            itemBuilder: (BuildContext context, int index){
+              final story = storyList[index];
+              return Container(
+                child: Column(
+                  children: [
+                    Card(
+                      color: Colors.white,
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Ink.image(
+                            image: AssetImage('assets/story_background.jpg'),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreenStory(story: story)));
+                              },
+                            ),
+                            height: 120,
+                            fit: BoxFit.cover,
                           ),
-                          height: 120,
-                          fit: BoxFit.cover,
-                        ),
-                        Text(
-                          story.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 24,
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          }
+                          Text(
+                            story.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
+          ),
         ),
       ),
       

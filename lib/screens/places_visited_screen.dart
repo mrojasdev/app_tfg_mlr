@@ -66,6 +66,7 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
         margin: const EdgeInsets.all(10),
         width: double.infinity,
         child: RefreshIndicator(
+          color: Colors.black87,
           onRefresh: () => _refreshPlaceInfo(),
           child: ListView.builder(
             itemCount: placeList.length,
