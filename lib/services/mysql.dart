@@ -4,9 +4,9 @@ import '../models/place.dart';
 
 class Mysql {
   static String host = 'sql7.freesqldatabase.com',
-                user = 'sql7624523',
-                password = 'G8nUkci4cx',
-                db = 'sql7624523';
+                user = 'sql7625538',
+                password = '1IknaVlq2T',
+                db = 'sql7625538';
   static int port  = 3306;
 
   Mysql();
@@ -56,5 +56,5 @@ class Mysql {
     return placesList;
   }
 
-  
+
 }

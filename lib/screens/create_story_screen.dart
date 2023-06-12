@@ -21,10 +21,10 @@ class CreateStoryScreen extends StatelessWidget {
     double longitude;
 
 
-    _registerStory(double latitude, double longitude, String title, String body, String username) async {
+  _registerStory(double latitude, double longitude, String title, String body, String username) async {
     db.getConnection().then((conn) {
       String sql = 'INSERT INTO stories VALUES (NULL, ?, ?, 100, ?, "User Story", ?, 0, 0, ?);';
-      conn.query(sql, [latitude, longitude, title, body, username],); 
+      conn.query(sql, [latitude, longitude, title, body, username],).whenComplete(() => conn.close()); 
     });
   }
 
@@ -35,9 +35,7 @@ class CreateStoryScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_circle_left),
             color: Colors.black87,
             onPressed: () {
-              final route =
-                  MaterialPageRoute(builder: (context) => MyHomePage(title: "Cicerone", user: user));
-              Navigator.pushReplacement(context, route);
+              Navigator.pop(context);
             },
           );
         }),

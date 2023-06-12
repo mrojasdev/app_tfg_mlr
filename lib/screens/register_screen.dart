@@ -18,14 +18,14 @@ class RegisterScreen extends StatelessWidget {
     String checkPasswd = '';
     String firstname = '';
     String lastname = '';
-    int age = 0;
+    String age = '';
     String email = '';
 
     _registerUser(String username, String passwd, String firstname, String lastname, int age,  String email) async {
     List<User> userList = [];
     db.getConnection().then((conn) {
       String sql = 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);';
-      conn.query(sql, [username, passwd, firstname, lastname, age, email],);
+      conn.query(sql, [username, passwd, firstname, lastname, age, email],).whenComplete(() => conn.close());
 
         
       });
@@ -147,7 +147,7 @@ class RegisterScreen extends StatelessWidget {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    age = int.parse(value);
+                    age = value;
                   },
                   decoration: InputDecoration(hintText: 'Edad'),
                   validator: (value) {
@@ -208,11 +208,11 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   onPressed: () async {
                     if (formKey.currentState?.validate() == false) return;
-                    _registerUser(username, passwd, firstname, lastname, age, email);
-
-                    final route = MaterialPageRoute(
-                        builder: (context) => const LoginScreen());
-                    Navigator.push(context, route);
+                    _registerUser(username, passwd, firstname, lastname, int.parse(age), email).whenComplete(() {
+                      final route = MaterialPageRoute(
+                            builder: (context) => const LoginScreen());
+                        Navigator.push(context, route);
+                    });
                   },
                   child: const SizedBox(
                       width: double.infinity,

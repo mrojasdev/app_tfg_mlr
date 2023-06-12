@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var detail = '';
   var image = '';
   List<Widget> screens = [];
-  //List<Place> currentPlaces = [];
+  List<Place> currentPlaces = [];
 
   void _getPlaceNotificationInfo(){
     db.getConnection().then((conn) {
@@ -111,26 +111,70 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _updatePosition(Position pos) async {
-    List<Placemark> pm = await placemarkFromCoordinates(pos.latitude, pos.longitude);
-    //currentPlaces = 
-    double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, 37.241263573, -3.560461439);
+    _receiveClosePlaces(pos.latitude, pos.longitude); 
     setState(() {
       _latitude = pos.latitude.toString();
       _longitude = pos.longitude.toString();
-      _distanceInMeters = distanceInMeters.toString();
     });
-    if(distanceInMeters < 155){
-      await NotificationService.showNotification(
-        title: placename,
-        body: detail,
-        summary: "summary",
-        notificationLayout: NotificationLayout.BigPicture,
-        bigPicture: image,
-        largeIcon: image,
-      );
+    print(currentPlaces);
+    currentPlaces.forEach((element) async {
+      double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, element.latitude, element.longitude);
+      if(distanceInMeters < element.radius){
+        _addPlaceToUser(element, widget.user.username);
     }
+    });
+    
+  }
+
+  _receiveClosePlaces(double latitude, double longitude) {
+    List<Place> placesList = [];
+    db.getConnection().then((conn) {
+      String sql = 'SELECT * FROM places WHERE (longitude BETWEEN (? - 0.0500) AND (? + 0.0500)) AND (latitude BETWEEN (? - 0.0500) AND (? + 0.0500)) AND id NOT IN ( SELECT place_id FROM user_place WHERE username = ? );';
+      conn.query(sql, [longitude, longitude, latitude, latitude, widget.user.username]).then((results){
+        for(var row in results){
+          placesList.add(
+            Place(id: row[0], latitude: row[1], longitude: row[2], radius: row[3], title: row[4], detail: row[5], body: row[6].toString(), image: row[7], city: row[8])
+          );
+          setState(() {
+            currentPlaces = placesList;
+          });
+        }
+      }).whenComplete(() => conn.close());
+    });
   }
   
+  _addPlaceToUser(Place place, String username) {
+    try{
+      bool isPlaceAdded = false;
+      db.getConnection().then((conn) {
+        String sql = 'SELECT * FROM user_place WHERE (username = ? AND place_id = ?);';
+        conn.query(sql, [widget.user.username, place.id]).then((results){
+          for(var row in results){
+            isPlaceAdded = true;
+          }
+        }).whenComplete((){
+          conn.close();
+          if(!isPlaceAdded){
+            db.getConnection().then((conn) {
+              String sql = 'INSERT INTO user_place VALUES (?, ?, ?);';
+              conn.query(sql, [widget.user.username, place.id, DateTime.now().toUtc()],).whenComplete(() => conn.close()); 
+              NotificationService.showNotification(
+                title: place.title,
+                body: place.detail,
+                notificationLayout: NotificationLayout.BigPicture,
+                bigPicture: place.image,
+                largeIcon: place.image,
+            );
+            });
+          }
+        });
+      });
+
+    }catch(e){
+      print(e);
+      return;
+    }
+  }
 
 
   @override
@@ -154,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                final route = MaterialPageRoute(
                   builder: (context) =>
                     CreateStoryScreen(user: widget.user,));
-                    Navigator.pushReplacement(context, route);
+                    Navigator.push(context, route);
             },
             icon: Icon(Icons.add_location_alt_outlined)
           ),

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 import '../models/place.dart';
-import '../screens/second_screen.dart';
 
 class NotificationService{
   static Future<void> initializeNotification() async {
