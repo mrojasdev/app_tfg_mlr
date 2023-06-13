@@ -75,9 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  var _latitude = "";
-  var _longitude = "";
-  var _distanceInMeters = "";
   StreamSubscription<Position>? _positionStreamSubscription;
 
   @override
@@ -115,12 +112,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _updatePosition(Position pos) async {
     _receiveClosePlaces(pos.latitude, pos.longitude);
     _receiveCloseStories(pos.latitude, pos.longitude);
-    setState(() {
-      _latitude = pos.latitude.toString();
-      _longitude = pos.longitude.toString();
-    });
-    print(currentPlaces);
-    print(currentStories);
+    //print(currentPlaces);
+    //print(currentStories);
     currentPlaces.forEach((element) async {
       double distanceInMeters = await Geolocator.distanceBetween(pos.latitude, pos.longitude, element.latitude, element.longitude);
       if(distanceInMeters < element.radius){
