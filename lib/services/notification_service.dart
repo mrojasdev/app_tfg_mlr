@@ -70,11 +70,7 @@ class NotificationService{
     debugPrint('onActionReceivedMethod');
     final payload = receivedAction.payload ?? {};
     if(payload["navigate"] == "true"){
-      MyApp.navigatorKey.currentState?.push(
-        MaterialPageRoute(
-          builder: (_) => const SecondScreen(),
-        ),
-      );
+
     }
   }
 

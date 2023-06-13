@@ -22,7 +22,6 @@ class RegisterScreen extends StatelessWidget {
     String email = '';
 
     _registerUser(String username, String passwd, String firstname, String lastname, int age,  String email) async {
-    List<User> userList = [];
     db.getConnection().then((conn) {
       String sql = 'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?);';
       conn.query(sql, [username, passwd, firstname, lastname, age, email],).whenComplete(() => conn.close()).whenComplete(() => conn.close());       
@@ -36,9 +35,7 @@ class RegisterScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_circle_left),
             color: Colors.black87,
             onPressed: () {
-              final route =
-                  MaterialPageRoute(builder: (context) => const LoginScreen());
-              Navigator.push(context, route);
+              Navigator.pop(context);
             },
           );
         }),
@@ -207,9 +204,7 @@ class RegisterScreen extends StatelessWidget {
                   onPressed: () async {
                     if (formKey.currentState?.validate() == false) return;
                     _registerUser(username, passwd, firstname, lastname, int.parse(age), email).whenComplete(() {
-                      final route = MaterialPageRoute(
-                            builder: (context) => const LoginScreen());
-                        Navigator.push(context, route);
+                      Navigator.pop(context);
                     });
                   },
                   child: const SizedBox(

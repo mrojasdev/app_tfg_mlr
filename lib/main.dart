@@ -89,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
     this.screens = [
       PlacesVisitedScreen(user: widget.user,),
       StoriesCollectedScreen(user: widget.user,),
-      AchievementsScreen(),
+      AchievementsScreen(user: widget.user,),
       ProfileScreen(),
     ];
   }

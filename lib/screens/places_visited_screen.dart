@@ -61,62 +61,87 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
   @override
   Widget build(BuildContext context) {
     _getPlaceInfo();
-    return Container(
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        width: double.infinity,
-        child: RefreshIndicator(
-          color: Colors.black87,
-          onRefresh: () => _refreshPlaceInfo(),
-          child: ListView.builder(
-            itemCount: placeList.length,
-            itemBuilder: (BuildContext context, int index){
-              final place = placeList[index];
-              return Container(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.white,
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Text(
-                            place.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontSize: 24,
-                              
-                            ),
-                          ),
-                          Ink.image(
-                            image: NetworkImage(
-                              place.image
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(place: place)));
-                              },
-                            ),
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+    if(placeList.isEmpty){
+      return Container(
+        child: Center(
+          child: LayoutBuilder(
+            builder: (context, constraints) => RefreshIndicator(
+              onRefresh: () => _refreshPlaceInfo(),
+              color: Colors.black87,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight
+                  ),
+                  child: Image(
+                      image: AssetImage('assets/no_data_places.png'),
+                      width: 250,
+                    ),
                 ),
-              );
-            }
+              ),
+            ),
           ),
         ),
-      ),
-      
-    );
+      );
+    }else{
+      return Container(
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          width: double.infinity,
+          child: RefreshIndicator(
+            color: Colors.black87,
+            onRefresh: () => _refreshPlaceInfo(),
+            child: ListView.builder(
+              itemCount: placeList.length,
+              itemBuilder: (BuildContext context, int index){
+                final place = placeList[index];
+                return Container(
+                  child: Column(
+                    children: [
+                      Card(
+                        color: Colors.white,
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Text(
+                              place.title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 24,
+                                
+                              ),
+                            ),
+                            Ink.image(
+                              image: NetworkImage(
+                                place.image
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen(place: place)));
+                                },
+                              ),
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
+            ),
+          ),
+        ),
+        
+      );
+    }
   }
 }
 

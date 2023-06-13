@@ -7,7 +7,10 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("Profile Screen"),
+        child: Image(
+          image: AssetImage('assets/wip.png'),
+          width: 100,
+        ),
       ),
     );
   }

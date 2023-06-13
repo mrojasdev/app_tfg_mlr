@@ -1,8 +1,6 @@
 import 'package:app_tfg_mlr/models/story.dart';
 import 'package:flutter/material.dart';
 
-import '../models/place.dart';
-
 class DetailsScreenStory extends StatelessWidget {
 
   final Story story;
@@ -68,15 +66,39 @@ class _StoryInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: 20),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        story.body.toString()
-        ,
-        textAlign: TextAlign.justify,
-        style: Theme.of(context).textTheme.subtitle1,
-      ),
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            story.body.toString()
+            ,
+            textAlign: TextAlign.justify,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Autor: '+story.username
+            ,
+            textAlign: TextAlign.justify,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Encontrado en: '+story.latitude.toString()+', '+story.longitude.toString()
+            ,
+            textAlign: TextAlign.justify,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ),
+      ],
     );
   }
 }

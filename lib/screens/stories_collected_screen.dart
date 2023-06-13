@@ -1,5 +1,3 @@
-import 'package:app_tfg_mlr/models/place.dart';
-import 'package:app_tfg_mlr/screens/details_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../models/story.dart';
@@ -59,60 +57,85 @@ class _StoriesCollectedScreenState extends State<StoriesCollectedScreen> {
   @override
   Widget build(BuildContext context) {
     _getStoryInfo();
-    return Container(
-      child: Container(
-        margin: const EdgeInsets.all(10),
-        width: double.infinity,
-        child: RefreshIndicator(
-          color: Colors.black87,
-          onRefresh: () => _refreshStoryInfo(),
-          child: ListView.builder(
-            itemCount: storyList.length,
-            itemBuilder: (BuildContext context, int index){
-              final story = storyList[index];
-              return Container(
-                child: Column(
-                  children: [
-                    Card(
-                      color: Colors.white,
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                            Text(
-                            story.title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black87,
-                              fontSize: 24,
-                              fontFamily: 'KaushanScript',
-                            ),
-                          ),
-                          Ink.image(
-                            image: AssetImage('assets/story_background.jpg'),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreenStory(story: story)));
-                              },
-                            ),
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+    if(storyList.isEmpty){
+      return Container(
+        child: Center(
+          child: LayoutBuilder(
+            builder: (context, constraints) => RefreshIndicator(
+              onRefresh: () => _refreshStoryInfo(),
+              color: Colors.black87,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight
+                  ),
+                  child: Image(
+                      image: AssetImage('assets/no_data_stories.png'),
+                      width: 250,
+                    ),
                 ),
-              );
-            }
+              ),
+            ),
           ),
         ),
-      ),
-      
-    );
+      );
+    }else{
+      return Container(
+        child: Container(
+          margin: const EdgeInsets.all(10),
+          width: double.infinity,
+          child: RefreshIndicator(
+            color: Colors.black87,
+            onRefresh: () => _refreshStoryInfo(),
+            child: ListView.builder(
+              itemCount: storyList.length,
+              itemBuilder: (BuildContext context, int index){
+                final story = storyList[index];
+                return Container(
+                  child: Column(
+                    children: [
+                      Card(
+                        color: Colors.white,
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                              Text(
+                              story.title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black87,
+                                fontSize: 24,
+                                fontFamily: 'KaushanScript',
+                              ),
+                            ),
+                            Ink.image(
+                              image: AssetImage('assets/story_background.jpg'),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreenStory(story: story)));
+                                },
+                              ),
+                              height: 60,
+                              fit: BoxFit.cover,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
+            ),
+          ),
+        ),
+        
+      );
+    }
   }
 }
 

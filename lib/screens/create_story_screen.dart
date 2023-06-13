@@ -1,6 +1,4 @@
-import 'package:app_tfg_mlr/main.dart';
 import 'package:app_tfg_mlr/models/user.dart';
-import 'package:app_tfg_mlr/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -61,8 +59,8 @@ class CreateStoryScreen extends StatelessWidget {
                       return 'La longitud no es válida';
                     }
 
-                    if (value.length > 80) {
-                      return 'La longitud no puede ser mayor a 80';
+                    if (value.length > 20) {
+                      return 'La longitud no puede ser mayor a 20';
                     }
                   },
                 ),
