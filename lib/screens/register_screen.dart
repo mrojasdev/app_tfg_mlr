@@ -52,9 +52,9 @@ class RegisterScreen extends StatelessWidget {
                   height: 50,
                 ),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(1500),
+                  borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/loading-gif.gif',
+                    'assets/cicerone_big.png',
                     fit: BoxFit.cover,
                     width: 150,
                   ),

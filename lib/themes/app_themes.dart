@@ -12,7 +12,7 @@ class AppThemes {
       elevation: 0,
     ),
 
-    // Formulario de registro y de login
+/*
     inputDecorationTheme: const InputDecorationTheme(
       floatingLabelStyle: TextStyle(color: primary),
       enabledBorder: OutlineInputBorder(
@@ -33,5 +33,6 @@ class AppThemes {
         topRight: Radius.circular(10),
       )),
     ),
+*/
   );
 }

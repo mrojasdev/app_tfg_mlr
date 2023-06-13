@@ -29,9 +29,9 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
           );
           setState(() {
             placeList = placesList;
-            print(placesList);
+            //print(placesList);
           });
-          print(placesList[0].body);
+          //print(placesList[0].body);
         }
       }).whenComplete(() => conn.close());
     });
@@ -48,9 +48,9 @@ class _PlacesVisitedScreenState extends State<PlacesVisitedScreen> {
           );
           setState(() {
             placeList = placesList;
-            print(placesList);
+            //print(placesList);
           });
-          print(placesList[0].body);
+          //print(placesList[0].body);
         }
       }).whenComplete(() => conn.close());
     });
